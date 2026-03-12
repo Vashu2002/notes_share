@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy | NoteShare{% endblock %}
+
+{% block content %}
+<div class="notebook-wrapper">
+    <div class="journal">
+        <div class="bookmark">Privacy</div>
+
+        <div class="journal-left">
+            <div class="journal-title">
+                <h1 class="fw-bold">Note<span style="color: #ff791a;">Share</span></h1>
+                <p class="text-muted">Legal Registry 2026</p>
+                <div class="divider"></div>
+                <p class="quote">"Science is the path, Scriptures are the destination."</p>
+            </div>
+        </div>
+
+        <div class="journal-right">
+            <div class="lined-paper">
+                <section class="policy-section">
+                    <h4 class="handwritten-heading">1. Data Collection</h4>
+                    <p>We collect essential information like your Email and Username to provide a seamless experience. Your uploaded notes are stored securely as your intellectual contribution to the community.</p>
+                </section>
+
+                <section class="policy-section mt-5">
+                    <h4 class="handwritten-heading">2. Usage Policy</h4>
+                    <p>Your data is never sold to third parties. We use it strictly for account management, NS Token rewards, and ensuring the integrity of the NoteShare ecosystem.</p>
+                </section>
+
+                <section class="policy-section mt-5">
+                    <h4 class="handwritten-heading">3. Security</h4>
+                    <p>Security is our priority. Since notes represent the path to knowledge, we protect them with industry-standard encryption to ensure your destination remains safe.</p>
+                </section>
+
+                <div class="notebook-footer mt-5">
+                    <p class="small text-muted fst-italic">For inquiries, visit our <a href="{% url 'contact' %}" class="text-orange">Contact Page</a>.</p>
+                    <p class="page-number">- 01 -</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* --- Journal Styling --- */
+.notebook-wrapper {
+    min-block-size: 100vh;
+    background: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    font-family: 'Georgia', serif;
+}
+
+.journal {
+    inline-size: 100%;
+    max-inline-size: 900px;
+    block-size: 600px;
+    background: #fff;
+    display: flex;
+    box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+    border-radius: 5px 15px 15px 5px;
+    position: relative;
+    border-inline-start: 15px solid #2c3e50; /* Leather Spine */
+}
+
+/* Bookmark Tab */
+.bookmark {
+    position: absolute;
+    inset-block-start: 40px;
+    inset-inline-end: -10px;
+    background: #ff791a;
+    color: white;
+    padding: 5px 20px;
+    font-weight: bold;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.journal-left {
+    inline-size: 35%;
+    background: #f8f9fa;
+    padding: 40px;
+    border-inline-end: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.journal-right {
+    inline-size: 65%;
+    padding: 40px;
+    overflow-y: auto;
+    background-color: #fff;
+}
+
+/* Lined Paper Effect */
+.lined-paper {
+    background-image: linear-gradient(#e1e1e1 1px, transparent 1px);
+    background-size: 100% 28px;
+    line-height: 28px;
+    padding-block-start: 5px;
+}
+
+.handwritten-heading {
+    font-family: 'Kalam', cursive;
+    color: #ff791a;
+    border-block-end: 2px solid #d8cd2f;
+    display: inline-block;
+    margin-block-end: 10px;
+}
+
+.divider {
+    block-size: 2px;
+    inline-size: 50px;
+    background: #ff791a;
+    margin: 20px auto;
+}
+
+.quote {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #888;
+}
+
+.text-orange {
+    color: #ff791a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.page-number {
+    text-align: center;
+    margin-block-start: 30px;
+    color: #ccc;
+    font-family: monospace;
+}
+
+/* Scrollbar Styling */
+.journal-right::-webkit-scrollbar {
+    inline-size: 5px;
+}
+.journal-right::-webkit-scrollbar-thumb {
+    background: #d8cd2f;
+    border-radius: 10px;
+}
+
+/* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+</style>
+{% endblock %}

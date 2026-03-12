@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+{% load static %}
+
+{% block title %}Login - Note Share{% endblock %}
+
+{% block content %}
+<style>
+    /* ===============================
+       LOGIN PAGE STYLING (NO SCROLL)
+    =================================*/
+    :root {
+        --primary-grad: linear-gradient(135deg, #d8cd2f 0%, #ff791a 100%);
+    }
+
+    /* Prevent scrolling to keep it a clean app-like interface */
+    html, body {
+        block-size: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; 
+    }
+
+    .auth-wrapper {
+        block-size: 100vh;
+        inline-size: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fbff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Floating Background Blobs */
+    .shape {
+        position: absolute;
+        filter: blur(80px);
+        z-index: 0;
+        opacity: 0.4;
+        border-radius: 50%;
+        animation: shapeMove 10s infinite alternate ease-in-out;
+    }
+    .shape-1 {
+        inline-size: 300px; block-size: 300px;
+        background: #d8cd2f;
+        inset-block-start: -100px; inset-inline-start: -100px;
+    }
+    .shape-2 {
+        inline-size: 400px; block-size: 400px;
+        background: #ff791a;
+        inset-block-end: -150px; inset-inline-end: -150px;
+        animation-delay: -5s;
+    }
+
+    @keyframes shapeMove {
+        from { transform: translate(0, 0) scale(1); }
+        to { transform: translate(80px, 80px) scale(1.1); }
+    }
+
+    /* --- GLASS CARD --- */
+    .card-box {
+        inline-size: 90%;
+        max-inline-size: 420px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 30px;
+        padding: 40px;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        animation: cardFade 0.8s ease-out;
+    }
+
+    @keyframes cardFade {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- BRAND LOGO (NAVBAR STYLE) --- */
+    .brand-section {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-block-end: 25px;
+    }
+
+    .brand-icon-box {
+        inline-size: 42px;
+        block-size: 42px;
+        background: var(--primary-grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: white;
+        transform: rotate(-3deg);
+        box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+        font-size: 1.2rem;
+    }
+
+    .brand-text {
+        font-weight: 800;
+        font-size: 1.7rem;
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+    }
+
+    .brand-text span {
+        color: #ff791a;
+    }
+
+    .title { font-weight: 800; color: #1a1a1a; margin-block-end: 5px; }
+    .overview { color: #777; font-size: 0.9rem; margin-block-end: 30px; }
+
+    /* --- FORM STYLING --- */
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #444;
+        margin-inline-start: 5px;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 12px 18px;
+        border: 2px solid #eee;
+        background: rgba(255, 255, 255, 0.5);
+        transition: 0.3s;
+        font-size: 0.95rem;
+    }
+
+    .form-control:focus {
+        border-color: #ff791a;
+        box-shadow: 0 0 0 4px rgba(255, 121, 26, 0.1);
+        background: white;
+    }
+
+    .forgot-password {
+        font-size: 0.8rem;
+        color: #ff791a;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .btn-gradient {
+        background: var(--primary-grad);
+        border: none;
+        padding: 14px;
+        border-radius: 15px;
+        color: white;
+        font-weight: 700;
+        transition: 0.4s;
+        box-shadow: 0 10px 20px rgba(255, 121, 26, 0.2);
+    }
+
+    .btn-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(255, 121, 26, 0.3);
+        color: white;
+    }
+
+    /* --- SOCIAL LOGIN --- */
+    .social-divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 25px 0;
+        color: #bbb;
+        font-size: 0.85rem;
+    }
+    .social-divider::before, .social-divider::after {
+        content: ''; flex: 1; border-block-end: 1px solid #eee;
+    }
+    .social-divider:not(:empty)::before { margin-inline-end: 15px; }
+    .social-divider:not(:empty)::after { margin-inline-start: 15px; }
+
+    .google-btn {
+        background: white;
+        border: 1px solid #eee;
+        padding: 12px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 600;
+        color: #555;
+        transition: 0.3s;
+        text-decoration: none;
+        inline-size: 100%;
+        font-size: 0.9rem;
+    }
+
+    .google-btn:hover {
+        background: #fdfdfd;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .signup-animated {
+        color: #ff791a;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    /* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+</style>
+
+<div class="auth-wrapper">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="card-box">
+        <div class="text-center">
+            <a href="{% url 'landing' %}" class="brand-section">
+                <div class="brand-icon-box">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+                <span class="brand-text">Note<span>Share</span></span>
+            </a>
+            
+            <h3 class="title">Welcome Back</h3>
+            <p class="overview">Science is the path, scriptures are the destination.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+            </div>
+
+            <div class="mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label mb-0">Password</label>
+                    <a href="#" class="forgot-password">Forgot?</a>
+                </div>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-gradient">
+                    Login Now <i class="bi bi-box-arrow-in-right ms-1"></i>
+                </button>
+            </div>
+
+            {% if form.errors %}
+            <div class="alert alert-danger mt-3 py-2 small">
+                Invalid email or password.
+            </div>
+            {% endif %}
+        </form>
+
+        <div class="social-divider">Or login with</div>
+
+        <a href="{% provider_login_url 'google' %}" class="google-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" width="18" alt="Google">
+            Continue with Google
+        </a>
+
+        <div class="text-center mt-4 small">
+            New here? <a href="{% url 'signup' %}" class="signup-animated">Create Account</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Ensure the page doesn't scroll
+    document.body.style.overflow = "hidden";
+</script>
+{% endblock %}

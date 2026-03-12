@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Welcome - Note Share{% endblock %}
+{% block content %}
+
+<style>
+/* ===============================
+   ADVANCED HERO WRAPPER
+=================================*/
+.hero-section {
+    min-block-size: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: #ffffff; /* Light background for premium feel */
+}
+
+/* Moving Mesh Background (Unique) */
+.mesh-bg {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(216, 205, 47, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 121, 26, 0.15) 0px, transparent 50%);
+    z-index: 1;
+}
+
+/* Floating 3D Cards (Visual Interest) */
+.floating-glass-card {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    z-index: 2;
+    animation: floatCard 6s infinite alternate ease-in-out;
+}
+
+.card-top-left { inset-block-start: 15%; inset-inline-start: 10%; animation-delay: 0s; }
+.card-bottom-right { inset-block-end: 15%; inset-inline-end: 10%; animation-delay: -3s; }
+
+@keyframes floatCard {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(-30px) rotate(5deg); }
+}
+
+/* ===============================
+   TYPOGRAPHY & GLOW
+=================================*/
+.hero-content {
+    position: relative;
+    z-index: 10;
+}
+
+.welcome-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    background: rgba(216, 205, 47, 0.1);
+    border: 1px solid rgba(216, 205, 47, 0.3);
+    border-radius: 100px;
+    color: #b8ad1a;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-block-end: 30px;
+    transform: translateY(30px);
+    opacity: 0;
+    animation: fadeInUp 0.8s forwards;
+}
+
+.hero-title-main {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    color: #1a1a1a;
+    margin-block-end: 30px;
+}
+
+.gradient-text-animated {
+    background: linear-gradient(90deg, #d8cd2f, #ff791a, #d8cd2f);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+/* Interactive Button */
+.btn-ultimate {
+    position: relative;
+    padding: 20px 50px;
+    background: var(--primary-grad);
+    color: white !important;
+    border-radius: 100px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    box-shadow: 0 15px 35px rgba(255, 121, 26, 0.4);
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
+
+.btn-ultimate:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 25px 50px rgba(255, 121, 26, 0.5);
+}
+
+.btn-ultimate::after {
+    content: '';
+    position: absolute;
+    inline-size: 100%;
+    block-size: 100%;
+    inset-block-start: 0;
+    inset-inline-start: -100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.5s;
+}
+
+.btn-ultimate:hover::after {
+    inset-inline-start: 100%;
+}
+
+/* ===============================
+   ANIMATIONS
+=================================*/
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mouse Follower Light */
+.cursor-light {
+    position: fixed;
+    inline-size: 400px;
+    block-size: 400px;
+    background: radial-gradient(circle, rgba(255, 121, 26, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+}
+
+
+/* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+</style>
+
+<div class="cursor-light" id="cursorLight"></div>
+
+<section class="hero-section">
+    <div class="mesh-bg"></div>
+
+    <div class="floating-glass-card card-top-left d-none d-lg-block">
+        <i class="bi bi-lightning-charge-fill text-warning"></i>
+        <span class="ms-2 fw-bold">Fast Sync</span>
+    </div>
+    <div class="floating-glass-card card-bottom-right d-none d-lg-block">
+        <i class="bi bi-shield-lock-fill" style="color: #ff791a;"></i>
+        <span class="ms-2 fw-bold">Secure Path</span>
+    </div>
+
+    <div class="container text-center hero-content">
+        <div class="welcome-pill">
+            <i class="bi bi-stars me-2"></i> Elevate Your Knowledge
+        </div>
+
+        <h1 class="hero-title-main">
+            Capture the <span class="gradient-text-animated">Path</span>,<br>
+            Reach the <span class="gradient-text-animated">Destination</span>.
+        </h1>
+
+        <p class="mx-auto text-muted mb-5" style="max-inline-size: 600px; font-size: 1.2rem; line-height: 1.6;">
+            The scriptures teach us that knowledge is our final home. 
+            Organize your thoughts and sync your world with NoteShare.
+        </p>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'signup' %}" class="btn btn-ultimate">
+                Get Started Free <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+        <div class="mt-5 pt-5 d-flex justify-content-center gap-5 opacity-50">
+            <div class="text-center">
+                <h4 class="fw-bold mb-0">10k+</h4>
+                <small>Seekers</small>
+            </div>
+            <div class="text-center">
+                <h4 class="fw-bold mb-0">99.9%</h4>
+                <small>Reliable</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Mouse Move Effect for Light
+const light = document.getElementById('cursorLight');
+document.addEventListener('mousemove', (e) => {
+    light.style.left = e.clientX + 'px';
+    light.style.top = e.clientY + 'px';
+});
+
+// Particles Generation (Improved)
+function createParticles() {
+    const section = document.querySelector('.hero-section');
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.style.position = 'absolute';
+        p.style.width = Math.random() * 10 + 'px';
+        p.style.height = p.style.width;
+        p.style.background = 'linear-gradient(90deg, #d8cd2f, #ff791a)';
+        p.style.borderRadius = '50%';
+        p.style.opacity = '0.2';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
+        p.style.zIndex = '1';
+        
+        section.appendChild(p);
+
+        // Simple floating animation
+        p.animate([
+            { transform: 'translateY(0) scale(1)' },
+            { transform: `translateY(-${Math.random() * 100}px) scale(1.5)` }
+        ], {
+            duration: 3000 + Math.random() * 3000,
+            iterations: Infinity,
+            direction: 'alternate'
+        });
+    }
+}
+createParticles();
+</script>
+
+{% endblock %}

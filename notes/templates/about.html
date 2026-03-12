@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}About Us | NoteShare{% endblock %}
+
+{% block content %}
+<div class="scrapbook-container">
+    <div class="scrapbook">
+        
+        <div class="tape tape-top-left"></div>
+        <div class="tape tape-bottom-right"></div>
+
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7" data-aos="fade-up" data-aos-duration="1000">
+                <div class="notepaper shadow-lg">
+                    <div class="red-line"></div>
+                    <div class="paper-content">
+                        <h1 class="display-5 fw-bold mb-4">Our <span style="color: #ff791a;">Mission</span></h1>
+                        
+                        <p class="lead text-muted handwritten-text">
+                            NoteShare is not just a platform; it's a bridge between academic knowledge and spiritual wisdom.
+                        </p>
+
+                        <div class="spiritual-highlight my-4" data-aos="zoom-in" data-aos-delay="300">
+                            <i class="bi bi-stars text-warning me-2"></i>
+                            <span class="fst-italic">"Science is just a path, but scriptures and God are the destination."</span>
+                        </div>
+
+                        <p class="handwritten-text">
+                            Our goal is to ensure every student has access to quality notes without any barriers. 
+                            We empower education through a community of contributors who believe that sharing knowledge 
+                            is the highest form of service.
+                        </p>
+                        
+                        <div class="d-flex gap-3 mt-4">
+                            <div class="badge-custom"><i class="bi bi-patch-check-fill me-1"></i> Quality Notes</div>
+                            <div class="badge-custom"><i class="bi bi-people-fill me-1"></i> Community</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center" data-aos="fade-left" data-aos-duration="1200">
+                <div class="polaroid-frame shadow-lg">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3429/3429210.png" class="img-fluid main-img" alt="Notebook Icon" style="max-block-size: 300px;">
+                    <div class="polaroid-caption">NoteShare Journey 2026</div>
+                </div>
+                
+                <div class="sticky-note shadow" data-aos="rotate-in" data-aos-delay="500">
+                    <p class="mb-0">Join the movement!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* --- Scrapbook Background --- */
+.scrapbook-container {
+    min-block-size: 100vh;
+    background: #fdf6e3; 
+    background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+    background-size: 30px 30px; 
+    padding: 120px 20px 60px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.scrapbook {
+    inline-size: 100%;
+    max-inline-size: 1100px;
+    position: relative;
+}
+
+/* --- The Lined Paper --- */
+.notepaper {
+    background: white;
+    padding: 60px 50px;
+    position: relative;
+    border-radius: 2px;
+    background-image: linear-gradient(#e1e1e1 1px, transparent 1px);
+    background-size: 100% 32px;
+    line-height: 32px;
+}
+
+.red-line {
+    position: absolute;
+    inset-inline-start: 40px;
+    inset-block-start: 0;
+    block-size: 100%;
+    inline-size: 2px;
+    background: rgba(255, 0, 0, 0.2);
+}
+
+.handwritten-text {
+    font-family: 'Kalam', cursive;
+    font-size: 1.1rem;
+    color: #444;
+}
+
+.spiritual-highlight {
+    background: rgba(255, 121, 26, 0.05);
+    padding: 20px;
+    border: 1px dashed #ff791a;
+    border-radius: 10px;
+    font-family: 'Georgia', serif;
+    line-height: 1.5;
+}
+
+/* --- Polaroid Styling --- */
+.polaroid-frame {
+    background: white;
+    padding: 15px 15px 50px 15px;
+    display: inline-block;
+    transform: rotate(3deg);
+    transition: 0.4s;
+    border: 1px solid #ddd;
+}
+
+.polaroid-frame:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.polaroid-caption {
+    font-family: 'Kalam', cursive;
+    font-size: 1.1rem;
+    margin-block-start: 15px;
+    color: #888;
+}
+
+/* --- Decor Elements --- */
+.tape {
+    position: absolute;
+    inline-size: 120px;
+    block-size: 40px;
+    background: rgba(216, 205, 47, 0.3); 
+    backdrop-filter: blur(2px);
+    z-index: 5;
+}
+
+.tape-top-left { inset-block-start: -20px; inset-inline-start: -20px; transform: rotate(-45deg); }
+.tape-bottom-right { inset-block-end: -10px; inset-inline-end: 20px; transform: rotate(-15deg); }
+
+.sticky-note {
+    position: absolute;
+    inset-block-end: -20px;
+    inset-inline-end: 10%;
+    background: #ffff88;
+    padding: 15px 25px;
+    transform: rotate(10deg);
+    font-family: 'Kalam', cursive;
+    border-radius: 2px;
+}
+
+.badge-custom {
+    background: #ff791a;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* --- AOS Custom Animation --- */
+[data-aos="rotate-in"] {
+    transform: rotate(30deg) scale(0);
+    opacity: 0;
+    transition-property: transform, opacity;
+}
+[data-aos="rotate-in"].aos-animate {
+    transform: rotate(10deg) scale(1);
+    opacity: 1;
+}
+
+/* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+</style>
+{% endblock %}

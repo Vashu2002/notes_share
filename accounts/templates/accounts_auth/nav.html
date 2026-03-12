@@ -1,0 +1,204 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top custom-nav">
+    <div class="container">
+        <a class="navbar-brand-premium" href="{% url 'landing' %}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+            <div class="brand-icon" style="inline-size: 42px; block-size: 42px; background: var(--primary-grad); display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; transform: rotate(-3deg); box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-size: 1.2rem;">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <span style="font-weight: 800; font-size: 1.6rem; color: #1a1a1a; letter-spacing: -0.5px;">Note<span style="color: #ff791a;">Share</span></span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="bi bi-grid-fill" style="color: #ff791a; font-size: 1.5rem;"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link-modern {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                       href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'landing' %}{% endif %}">
+                       Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link-modern {% if request.resolver_match.url_name == 'explore_notes' %}active{% endif %}" 
+                       href="#">
+                       Notes
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link-modern dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown">
+                        Explore <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+                    </a>
+                    <ul class="dropdown-menu-modern dropdown-menu dropdown-menu-end animate slideIn">
+                        <li><a class="dropdown-item" href="{% url 'about' %}"><i class="bi bi-info-circle me-2"></i>About Us</a></li>
+                        <li><a class="dropdown-item" href="{% url 'contact' %}"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+                        
+                        {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'wallet' %}"><i class="bi bi-wallet2 me-2"></i>Wallet</a></li>
+                        {% endif %}
+
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item {% if request.resolver_match.url_name == 'privacy' %}active{% endif %}" href="{% url 'privacy' %}"><i class="bi bi-shield-check me-2"></i>Privacy Policy</a></li>
+                    </ul>
+                </li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item ms-lg-3">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-premium-action" style="border: none; cursor: pointer; outline: none;">
+                            <span>Logout</span>
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item ms-lg-3">
+                    <a href="{% url 'login' %}" class="nav-link-modern">Login</a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a href="{% url 'signup' %}" class="btn-premium-action">Sign Up</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+/* ================= PREMIUM NAVBAR STYLING (RETAINED) ================= */
+
+:root {
+    --primary-grad: linear-gradient(135deg, #d8cd2f 0%, #ff791a 100%);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+}
+
+.custom-nav {
+    padding: 15px 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    border-block-end: 1px solid transparent;
+}
+
+.custom-nav.scrolled {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    padding: 10px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border-block-end: 1px solid rgba(216, 205, 47, 0.2);
+}
+
+.navbar-brand-premium {
+    font-weight: 800;
+}
+
+.nav-link-modern {
+    color: #444 !important;
+    font-weight: 600;
+    padding: 8px 18px !important;
+    margin: 0 5px;
+    border-radius: 10px;
+    transition: 0.3s;
+    position: relative;
+    text-decoration: none;
+}
+
+.nav-link-modern:hover, .nav-link-modern.active {
+    color: #ff791a !important;
+    background: rgba(255, 121, 26, 0.05);
+}
+
+.btn-premium-action {
+    background: var(--primary-grad);
+    border: none;
+    padding: 10px 22px;
+    border-radius: 12px;
+    color: white !important;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.4s;
+    box-shadow: 0 8px 20px rgba(255, 121, 26, 0.2);
+    text-decoration: none;
+}
+
+.btn-premium-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(255, 121, 26, 0.4);
+}
+
+.dropdown-menu-modern {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    padding: 10px;
+    background: white;
+    min-inline-size: 200px;
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.2s;
+    color: #444;
+    text-decoration: none;
+}
+
+.dropdown-item:hover {
+    background: rgba(216, 205, 47, 0.1);
+    color: #ff791a !important;
+    transform: translateX(5px);
+}
+
+.dropdown-toggle::after { display: none; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate.slideIn { animation: slideIn 0.3s ease-out; }
+
+/* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+</style>
+
+<script>
+window.addEventListener('scroll', function() {
+    const nav = document.querySelector('.custom-nav');
+    if (window.scrollY > 40) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
+</script>

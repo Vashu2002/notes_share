@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% block title %}Contact Us | NoteShare{% endblock %}
+
+{% block content %}
+<div class="notebook-container">
+    <div class="notebook">
+        <div class="spiral"></div>
+
+        <div class="paper" id="form-paper">
+            <form method="POST" id="contact-form">
+                {% csrf_token %}
+                
+                <div class="page active-page" id="page-1">
+                    <div class="lines">
+                        <h2 class="handwritten-title">Hello! <span style="color: #ff791a;">I am...</span></h2>
+                        <div class="input-field mt-5">
+                            <input type="text" name="name" id="name" placeholder="Write your name here..." required>
+                        </div>
+                    </div>
+                    <div class="page-footer">
+                        <span>Page 01</span>
+                        <button type="button" class="btn-flip" onclick="nextPage(2)">Next Page <i class="bi bi-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="page" id="page-2">
+                    <div class="lines">
+                        <h2 class="handwritten-title">Reach <span style="color: #ff791a;">Me At...</span></h2>
+                        <div class="input-field mt-5">
+                            <input type="email" name="email" id="email" placeholder="Enter your email address..." required>
+                        </div>
+                    </div>
+                    <div class="page-footer">
+                        <button type="button" class="btn-flip btn-prev" onclick="nextPage(1)">Back</button>
+                        <span>Page 02</span>
+                        <button type="button" class="btn-flip" onclick="nextPage(3)">Next Page <i class="bi bi-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="page" id="page-3">
+                    <div class="lines">
+                        <h2 class="handwritten-title">My <span style="color: #ff791a;">Thoughts...</span></h2>
+                        <div class="input-field mt-4">
+                            <textarea name="message" id="message" rows="4" placeholder="How can we help? Write it down..."></textarea>
+                        </div>
+                    </div>
+                    <div class="page-footer">
+                        <button type="button" class="btn-flip btn-prev" onclick="nextPage(2)">Back</button>
+                        <span>Page 03</span>
+                        <button type="submit" class="btn-flip submit-btn">Finish & Send <i class="bi bi-send"></i></button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* --- Notebook Layout --- */
+.notebook-container {
+    min-block-size: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f0f2f5;
+    padding: 20px;
+    font-family: 'Kalam', cursive, sans-serif; /* For handwritten look */
+}
+
+.notebook {
+    inline-size: 100%;
+    max-inline-size: 500px;
+    block-size: 550px;
+    background: white;
+    position: relative;
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.1), -10px -10px 40px rgba(255,255,255,0.8);
+    border-radius: 5px 20px 20px 5px;
+    display: flex;
+}
+
+/* Spiral Binder Design */
+.spiral {
+    inline-size: 40px;
+    block-size: 100%;
+    background: #e0e0e0;
+    border-inline-end: 2px solid #ddd;
+    position: relative;
+    background-image: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.05) 50%);
+    background-size: 10px 100%;
+}
+.spiral::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 20px;
+    inset-inline-start: 10px;
+    inline-size: 20px;
+    block-size: calc(100% - 40px);
+    background: repeating-linear-gradient(#444 0, #444 10px, transparent 10px, transparent 30px);
+    border-radius: 10px;
+}
+
+.paper {
+    flex: 1;
+    padding: 40px;
+    background-image: linear-gradient(#e1e1e1 1px, transparent 1px);
+    background-size: 100% 30px; /* Notebook lines */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Page Transitions */
+.page {
+    position: absolute;
+    inline-size: 85%;
+    block-size: 85%;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.page.active-page {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+
+.handwritten-title {
+    font-weight: 700;
+    margin-block-end: 20px;
+}
+
+.input-field input, .input-field textarea {
+    inline-size: 100%;
+    background: transparent;
+    border: none;
+    border-block-end: 2px dashed #ff791a;
+    padding: 10px 0;
+    font-size: 1.2rem;
+    outline: none;
+    color: #333;
+}
+
+/* Buttons */
+.page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-block-start: 1px solid #eee;
+    padding-block-start: 20px;
+}
+
+.btn-flip {
+    background: #ff791a;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-flip:hover {
+    background: #d8cd2f;
+    transform: scale(1.05);
+}
+
+.btn-prev {
+    background: #6c757d;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #d8cd2f 0%, #ff791a 100%);
+}
+
+
+/* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+</style>
+
+<script>
+function nextPage(pageNum) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active-page');
+        page.style.transform = "translateX(-100px)"; // Flip out animation
+    });
+
+    // Show selected page
+    const active = document.getElementById('page-' + pageNum);
+    active.classList.add('active-page');
+    active.style.transform = "translateX(0)";
+}
+</script>
+{% endblock %}

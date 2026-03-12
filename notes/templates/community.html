@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Community | NoteShare Elite{% endblock %}
+
+{% block content %}
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-grad: linear-gradient(135deg, #d8cd2f 0%, #ff791a 100%);
+        --dark-navy: #0f172a;
+        --soft-slate: #f1f5f9;
+    }
+
+    .community-hero {
+        padding: 160px 0 100px;
+        background: var(--dark-navy);
+        color: white;
+        border-radius: 0 0 80px 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Abstract background circles */
+    .community-hero::after {
+        content: '';
+        position: absolute;
+        inset-block-start: -10%; inset-inline-end: -5%;
+        inline-size: 400px; block-size: 400px;
+        background: rgba(216, 205, 47, 0.1);
+        border-radius: 50%;
+        filter: blur(80px);
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 25px;
+        border-radius: 25px;
+        transition: 0.3s;
+    }
+
+    .stat-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-5px);
+    }
+
+    .feature-icon-box {
+        inline-size: 60px;
+        block-size: 60px;
+        background: var(--primary-grad);
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        font-size: 1.5rem;
+        color: white;
+        margin-block-end: 20px;
+    }
+
+    .member-card {
+        background: white;
+        border-radius: 30px;
+        padding: 30px;
+        border: 1px solid #e2e8f0;
+        transition: 0.4s ease-in-out;
+    }
+
+    .member-card:hover {
+        box-shadow: 0 30px 60px rgba(0,0,0,0.06);
+        border-color: var(--ff791a);
+    }
+
+    .community-cta {
+        background: var(--primary-grad);
+        border-radius: 40px;
+        padding: 60px;
+        margin-block-start: -80px;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 20px 40px rgba(255, 121, 26, 0.2);
+    }
+
+    .btn-community-join {
+        background: white;
+        color: var(--dark-navy);
+        border: none;
+        padding: 15px 40px;
+        border-radius: 100px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        transition: 0.3s;
+    }
+
+    .btn-community-join:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
+
+<section class="community-hero text-center">
+    <div class="container">
+        <div data-aos="zoom-in">
+            <h1 class="display-2 fw-black mb-4">The <span class="gradient-text">Elite</span> Circle</h1>
+            <p class="lead opacity-75 mx-auto mb-5" style="max-inline-size: 700px;">
+                Where science meets scripture and students meet success. Join 50,000+ scholars in the world's most sophisticated learning network.
+            </p>
+        </div>
+        
+        <div class="row g-4 mt-2 justify-content-center">
+            <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-card">
+                    <h2 class="fw-bold mb-0">50K+</h2>
+                    <small class="opacity-50">Members</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-card">
+                    <h2 class="fw-bold mb-0">120+</h2>
+                    <small class="opacity-50">Universities</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <h2 class="display-5 fw-bold mb-4">Why join our <span class="text-warning">Nexus?</span></h2>
+                <div class="d-flex gap-4 mb-4">
+                    <div class="feature-icon-box"><i class="bi bi-chat-heart"></i></div>
+                    <div>
+                        <h5 class="fw-bold">Peer Discussions</h5>
+                        <p class="text-muted">Engage in deep intellectual debates about Science, Philosophy, and Theology.</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-4 mb-4">
+                    <div class="feature-icon-box"><i class="bi bi-shield-check"></i></div>
+                    <div>
+                        <h5 class="fw-bold">Verified Mentorship</h5>
+                        <p class="text-muted">Get your doubts cleared by students who have already aced the exams.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="member-card">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning rounded-circle p-2 me-3">⭐</div>
+                        <h6 class="mb-0 fw-bold">Top Contributor of the Week</h6>
+                    </div>
+                    <p class="fst-italic text-muted">"Being part of this community changed how I view education. It's not just about marks; it's about the destination."</p>
+                    <div class="d-flex align-items-center mt-4">
+                        <div class="avatar bg-dark text-white rounded-circle p-2 me-2">JD</div>
+                        <span class="fw-bold">John Doe, IIT Delhi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container mb-5">
+    <div class="community-cta text-center text-white" data-aos="flip-up">
+        <h2 class="display-4 fw-black mb-3">Ready to find your destination?</h2>
+        <p class="mb-5 opacity-75 fs-5">Secure your spot in the next generation of academic leaders.</p>
+        <button class="btn btn-community-join shadow">Join Now (Free for 2026 Batch)</button>
+    </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true });
+</script>
+{% endblock %}

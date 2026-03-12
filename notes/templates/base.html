@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Note Share{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary-grad: linear-gradient(135deg, #d8cd2f 0%, #ff791a 100%);
+            --leather-dark: #2c3e50; /* Dark Journal Cover Color */
+        }
+
+        body {
+            background-color: #f8fbff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-block-size: 100vh;
+        }
+
+        /* --- NOTEBOOK SIDEBAR STYLING --- */
+        .sidebar {
+            position: fixed;
+            inset-block-start: 0;
+            inset-inline-start: -340px; 
+            inline-size: 320px;
+            block-size: 100vh;
+            background: var(--leather-dark); 
+            z-index: 3000;
+            transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 20px 0 50px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            border-inline-end: 8px solid #1a252f;
+        }
+
+        .sidebar.active { inset-inline-start: 0; }
+
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 2500;
+            display: none;
+        }
+
+        .sidebar-overlay.active { display: block; }
+
+        /* Inside the sidebar: The "Paper" Sheet */
+        .sidebar-inner-paper {
+            margin: 15px;
+            background: #fff;
+            flex-grow: 1;
+            border-radius: 5px;
+            background-image: linear-gradient(#f1f1f1 1px, transparent 1px);
+            background-size: 100% 30px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            background: #fff;
+            padding: 45px 25px 20px;
+            text-align: center;
+            border-block-end: 2px solid #ff791a;
+            position: relative;
+        }
+
+        .user-avatar-large {
+            inline-size: 80px; block-size: 80px;
+            background: var(--primary-grad); color: white;
+            border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; font-weight: bold;
+            margin: 0 auto 15px;
+            transform: rotate(-3deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 4px solid white;
+        }
+
+        .sidebar-content { flex-grow: 1; padding: 25px; overflow-y: auto; }
+
+        .info-card {
+            background: transparent; padding: 12px 0;
+            margin-block-end: 5px; border-block-end: 1px dashed #ddd;
+        }
+
+        .info-label { font-size: 0.7rem; color: #ff791a; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .info-value { font-size: 0.95rem; color: #333; font-family: 'Courier New', Courier, monospace; font-weight: bold; display: block; }
+
+        /* Sidebar Toggle Tab */
+        #sidebarToggle {
+            position: fixed;
+            inset-block-start: 100px; inset-inline-start: 0;
+            z-index: 2000;
+            cursor: pointer;
+            background: var(--leather-dark);
+            color: white;
+            padding: 10px 12px 10px 5px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 5px 2px 15px rgba(0,0,0,0.2);
+            transition: all 0.4s ease;
+        }
+        #sidebarToggle:hover { padding-inline-start: 10px; background: #ff791a; }
+
+        .sidebar-footer { padding: 20px; background: #fff; }
+
+        /* Logout Button */
+        .btn-premium-logout {
+            inline-size: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            background: var(--leather-dark);
+            color: white;
+            border: none;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .btn-premium-logout:hover { background: var(--primary-grad);; transform: translateY(-2px); }
+
+        /* --- MAIN WRAPPER & FOOTER --- */
+        .main-wrapper { flex: 1 0 auto; transition: 0.4s; inline-size: 100%; }
+
+        .premium-footer {
+            background: white;
+            border-block-start: 1px solid rgba(0,0,0,0.05);
+            padding: 40px 0;
+            margin-block-start: 50px;
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #1a1a1a;
+        }
+
+        .social-links a {
+            color: #6c757d;
+            font-size: 1.3rem;
+            margin: 0 12px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .social-links a:hover { color: #ff791a; transform: translateY(-3px); }
+
+        .fade-in { animation: fadeInPage 0.6s ease-in; }
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================= RESPONSIVE MASTER CODE ================= */
+
+/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
+@media (max-width: 992px) {
+    .container { inline-size: 95%; } 
+    .brand-text { font-size: 1.4rem; }
+    .card-box { inline-size: 85%; padding: 25px; }
+}
+
+/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
+@media (max-width: 768px) {
+    body { font-size: 14px; }
+    .brand-text { font-size: 1.2rem; }
+    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
+    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
+}
+
+/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
+@media (min-width: 1400px) {
+    .container { max-inline-size: 1200px; margin: 0 auto; }
+}
+
+/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
+img, video, canvas, svg {
+    max-inline-size: 100%;
+    block-size: auto;
+}
+    </style>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+        <div class="sidebar-overlay" id="overlay"></div>
+
+        <div id="sidebarToggle">
+            <i class="bi bi-chevron-right fs-4"></i>
+        </div>
+
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-inner-paper">
+                <div class="sidebar-header">
+                    <span id="closeSidebar" style="position: absolute; inset-block-start: 20px; inset-inline-end: 25px; cursor:pointer; font-size: 1.5rem; color: #aaa;">&times;</span>
+                    <div class="user-avatar-large">{{ user.username|first|upper }}</div>
+                    <h5 class="m-0 fw-bold" style="color: #2c3e50;">{{ user.username }}</h5>
+                    <p class="small text-muted mb-0">Official Member</p>
+                </div>
+
+                <div class="sidebar-content">
+                    <div class="info-card">
+                        <span class="info-label">Member Email</span>
+                        <span class="info-value text-break">{{ user.email }}</span>
+                    </div>
+
+                    <div class="info-card">
+                        <span class="info-label">Joined On</span>
+                        <span class="info-value">{{ user.date_joined|date:"d M, Y" }}</span>
+                    </div>
+
+                    <div class="info-card">
+                        <span class="info-label">Account Status</span>
+                        <span class="info-value text-success">ACTIVE <i class="bi bi-patch-check-fill small"></i></span>
+                    </div>
+                    
+                    <div class="mt-4 p-3 rounded" style="background: #fdf6e3; border: 1px dashed #d8cd2f; position: relative;">
+                        <i class="bi bi-quote text-warning opacity-50" style="position: absolute; inset-block-start: 5px; inset-inline-start: 5px; font-size: 1.2rem;"></i>
+                        <p class="small fst-italic mb-0 text-muted" style="line-height: 1.5; padding-inline-start: 10px;">
+                            "Science is the path, but scriptures and God are the destination."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                     <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-premium-logout">
+                            <span>Logout Account</span>
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="main-wrapper">
+        {% if user.is_authenticated %}
+            {% include 'accounts_auth/nav.html' %}
+        {% endif %}
+
+        <div class="fade-in">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <footer class="premium-footer">
+        <div class="container text-center">
+            <div class="footer-logo mb-3">Note<span style="color: #ff791a;">Share</span></div>
+            <div class="social-links mb-4">
+                <a href="#"><i class="bi bi-github"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+            </div>
+            <p class="text-muted small mb-1">&copy; 2026 <b>Note Share</b>. All Rights Reserved.</p>
+            <p class="text-muted x-small" style="font-size: 0.75rem;">Science is the path, Knowledge is the destination.</p>
+        </div>
+    </footer>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const closeBtn = document.getElementById('closeSidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active');
+            if (toggleBtn) {
+                // Moving the toggle tab with the sidebar
+                toggleBtn.style.left = sidebar.classList.contains('active') ? '320px' : '0';
+                toggleBtn.innerHTML = sidebar.classList.contains('active') ? 
+                    '<i class="bi bi-chevron-left fs-4"></i>' : 
+                    '<i class="bi bi-chevron-right fs-4"></i>';
+            }
+        }
+
+        if (toggleBtn) toggleBtn.onclick = toggleSidebar;
+        if (closeBtn) closeBtn.onclick = toggleSidebar;
+        if (overlay) overlay.onclick = toggleSidebar;
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
