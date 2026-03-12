@@ -59,6 +59,8 @@
     z-index: 10;
 }
 
+
+
 .welcome-pill {
     display: inline-flex;
     align-items: center;
@@ -74,6 +76,8 @@
     opacity: 0;
     animation: fadeInUp 0.8s forwards;
 }
+
+
 
 .hero-title-main {
     font-size: clamp(3rem, 8vw, 5.5rem);
@@ -207,6 +211,7 @@ img, video, canvas, svg {
 
         <p class="mx-auto text-muted mb-5" style="max-inline-size: 600px; font-size: 1.2rem; line-height: 1.6;">
             The scriptures teach us that knowledge is our final home. 
+
             Organize your thoughts and sync your world with NoteShare.
         </p>
 
@@ -231,6 +236,7 @@ img, video, canvas, svg {
 
 <script>
 // Mouse Move Effect for Light
+
 const light = document.getElementById('cursorLight');
 document.addEventListener('mousemove', (e) => {
     light.style.left = e.clientX + 'px';
@@ -238,6 +244,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 // Particles Generation (Improved)
+
 function createParticles() {
     const section = document.querySelector('.hero-section');
     for (let i = 0; i < 20; i++) {
@@ -255,6 +262,7 @@ function createParticles() {
         section.appendChild(p);
 
         // Simple floating animation
+        
         p.animate([
             { transform: 'translateY(0) scale(1)' },
             { transform: `translateY(-${Math.random() * 100}px) scale(1.5)` }
