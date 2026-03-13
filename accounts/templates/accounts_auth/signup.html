@@ -7,7 +7,7 @@
 {% block content %}
 <style>
     /* ===============================
-       AUTH PAGE STYLING (NO SCROLL)
+        AUTH PAGE STYLING (NO SCROLL)
     =================================*/
     :root {
         --primary-grad: linear-gradient(135deg, #d8cd2f 0%, #ff791a 100%);
@@ -146,6 +146,19 @@
         font-size: 0.9rem;
     }
 
+    /* Role Selection Specific Styling */
+    .role-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 0 5px;
+    }
+    
+    .form-check-input:checked {
+        background-color: #ff791a;
+        border-color: #ff791a;
+    }
+
     .btn-gradient {
         background: var(--primary-grad);
         border: none;
@@ -256,10 +269,28 @@ img, video, canvas, svg {
                     <input type="password" name="password2" class="form-control" placeholder="Repeat" required>
                 </div>
             </div>
-            
-            <p class="text-muted mb-3" style="font-size: 0.7rem;">
+
+             <p class="text-muted mb-3" style="font-size: 0.7rem;">
                 8+ characters with number & symbol.
             </p>
+
+            <label class="form-label mb-2">Register as:</label>
+            <div class="role-container">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="user_role" id="student" value="student" checked required>
+                    <label class="form-check-label small" for="student">Student</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="user_role" id="teacher" value="teacher">
+                    <label class="form-check-label small" for="teacher">Teacher</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="user_role" id="other" value="other">
+                    <label class="form-check-label small" for="other">Other</label>
+                </div>
+            </div>
+            
+         
 
             <div class="d-grid">
                 <button type="submit" class="btn btn-gradient">

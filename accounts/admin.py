@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Note
+from .models import Profile
 
-@admin.register(Note)
-class NoteAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'created_at')
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role')

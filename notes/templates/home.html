@@ -231,47 +231,54 @@
     </section>
 
     <section class="px-4">
-        <div class="container-fluid">
-            <div class="smart-filter-card" data-aos="fade-up">
-                <div class="row g-4">
-                    <div class="col-lg-3">
-                        <label class="fw-bold small mb-2 text-uppercase text-dark">University</label>
-                        <div class="custom-input-group">
-                            <select class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                                <option>Stanford University</option>
-                                <option>MIT</option>
-                                <option>IIT Delhi</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="fw-bold small mb-2 text-uppercase text-dark">Academic Year</label>
-                        <div class="custom-input-group">
-                            <select class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                                <option>Sophomore Year</option>
-                                <option>Junior Year</option>
-                                <option>Final Year</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="fw-bold small mb-2 text-uppercase text-dark">Specialization</label>
-                        <div class="custom-input-group">
-                            <select class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                                <option>Computer Science</option>
-                                <option>Quantum Physics</option>
-                                <option>Business Law</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 d-flex align-items-end">
-                        <button class="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm">Search Database</button>
+    <div class="container-fluid">
+        <form method="GET" action="{% url 'explore_notes' %}" class="smart-filter-card" data-aos="fade-up">
+            <div class="row g-3"> <div class="col-lg-2">
+                    <label class="fw-bold small mb-2 text-uppercase text-dark">University</label>
+                    <div class="custom-input-group">
+                        <select name="university" id="university" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
+                            <option value="">Select Uni</option>
+                            {% for uni in universities %}
+                            <option value="{{ uni.id }}">{{ uni.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
+                <div class="col-lg-2">
+                    <label class="fw-bold small mb-2 text-uppercase text-dark">College</label>
+                    <div class="custom-input-group">
+                        <select name="college" id="college" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
+                            <option value="">Select College</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <label class="fw-bold small mb-2 text-uppercase text-dark">Course</label>
+                    <div class="custom-input-group">
+                        <select name="course" id="course" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
+                            <option value="">Select Course</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <label class="fw-bold small mb-2 text-uppercase text-dark">Batch</label>
+                    <div class="custom-input-group">
+                        <select name="batch" id="batch" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
+                            <option value="">Select Batch</option>
+                            </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm">Search Database</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
     <section class="py-5 px-4 mt-5">
         <div class="container-fluid">
             <h2 class="display-6 fw-bold mb-4">Platform <span class="text-warning">Insights</span></h2>
@@ -339,7 +346,21 @@
                 <i class="bi bi-cloud-arrow-up display-1 text-warning mb-4 d-block"></i>
                 <h3 class="fw-bold">Ready to Start?</h3>
                 <p class="opacity-75 mb-4">Drag files here or click to browse (PDF, DOCX, Images)</p>
-                <button class="btn btn-light btn-lg rounded-pill px-5 fw-bold shadow-lg">Upload Files</button>
+            <form method="POST" action="{% url 'upload_note' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Note Title" required>
+    
+    <select name="batch_id" required>
+        {% for batch in batches %}
+            <option value="{{batch.id}}">{{batch.year}}</option>
+        {% endfor %}
+    </select>
+
+    <input type="file" name="note_file" id="fileInput" style="display: none;">
+    
+    <button type="button" class="btn btn-warning" onclick="document.getElementById('fileInput').click();">Select File</button>
+    <button type="submit" class="btn btn-primary">Save to Vault</button>
+</form>
             </div>
         </div>
     </section>
@@ -366,5 +387,38 @@
         if(b1) b1.style.transform = `translate(${moveX}px, ${moveY}px)`;
         if(b2) b2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
     });
+
+    document.getElementById('university').addEventListener('change', function() {
+    fetch(`/ajax/load-colleges/?uni_id=${this.value}`)
+    .then(res => res.json())
+    .then(data => {
+        let options = '<option value="">Select College</option>';
+        data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
+        document.getElementById('college').innerHTML = options;
+    });
+    
+    
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+
+        // जब 'Select File' बटन क्लिक हो
+        uploadBtn.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        // (वैकल्पिक) फाइल चुनने के बाद बटन का टेक्स्ट बदलें ताकि पता चले फाइल चुनी गई है
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                uploadBtn.textContent = "File Selected: " + this.files[0].name;
+                uploadBtn.classList.replace('btn-warning', 'btn-success');
+            }
+        });
+    });
+
+
+});
 </script>
 {% endblock %}
