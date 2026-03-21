@@ -17,8 +17,8 @@
         --card-border: rgba(0,0,0,0.12);
         --sidebar-width: 280px;
         --sidebar-collapsed: 80px;
-        --text-main: #000000; /* Pure black for maximum clarity */
-        --text-muted: #1a1a1a; /* Very dark gray for descriptions */
+        --text-main: #000000;
+        --text-muted: #1a1a1a;
     }
 
     /* BACKGROUND ANIMATION */
@@ -42,7 +42,7 @@
     .blob-1 { inline-size: 700px; block-size: 700px; background: #d8cd2f; inset-block-start: -10%; inset-inline-start: -5%; }
     .blob-2 { inline-size: 600px; block-size: 600px; background: #ff791a; inset-block-end: -5%; inset-inline-end: -5%; }
 
-    /* LAYOUT ENGINE - STRETCH TO RIGHT */
+    /* LAYOUT ENGINE */
     .dashboard-wrapper {
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         padding-block-end: 100px;
@@ -55,7 +55,6 @@
     body.sidebar-collapsed .dashboard-wrapper { margin-inline-start: var(--sidebar-collapsed); }
     body:not(.sidebar-collapsed) .dashboard-wrapper { margin-inline-start: var(--sidebar-width); }
 
-    /* COMPONENTS */
     .hero-container {
         padding-block-start: 40px;
         padding-block-end: 60px;
@@ -74,7 +73,6 @@
         inline-size: 100%;
     }
 
-    /* TEXT STYLES */
     .text-muted, .lead { color: var(--text-muted) !important; opacity: 1 !important; font-weight: 600; }
     h1, h2, h3, h4, h5 { color: var(--text-main); font-weight: 800; }
     
@@ -84,7 +82,6 @@
         -webkit-text-fill-color: transparent;
     }
 
-    /* DROPDOWN & INPUTS */
     .smart-filter-card {
         background: #ffffff;
         border-radius: 30px;
@@ -112,7 +109,6 @@
         background: white;
     }
 
-    /* ALIGNMENT FIX FOR DROPDOWNS */
     .form-select-custom {
         text-align: start;
         padding-inline-start: 5px;
@@ -126,7 +122,6 @@
         inline-size: 100%;
     }
 
-    /* BENTO GRID */
     .bento-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -145,7 +140,6 @@
     .bento-1 { grid-column: span 2; grid-row: span 2; background: var(--dark-bg); color: white; }
     .bento-2 { grid-column: span 2; }
 
-    /* TOKEN CARDS */
     .token-card {
         background: white;
         border-radius: 35px;
@@ -169,7 +163,6 @@
         font-size: 2rem;
     }
 
-    /* UPLOAD SECTION */
     .upload-section {
         background: var(--dark-bg);
         border-radius: 60px;
@@ -186,7 +179,16 @@
         background: rgba(255,255,255,0.05);
     }
 
-    /* RESPONSIVE */
+    /* UPLOAD FORM INPUTS STYLING */
+    .upload-input-style {
+        background: rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        color: white !important;
+        border-radius: 12px;
+        padding: 12px;
+    }
+    .upload-input-style::placeholder { color: rgba(255,255,255,0.4); }
+
     @media (max-inline-size: 1200px) {
         .bento-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
         .hero-card { padding: 50px; }
@@ -233,7 +235,8 @@
     <section class="px-4">
     <div class="container-fluid">
         <form method="GET" action="{% url 'explore_notes' %}" class="smart-filter-card" data-aos="fade-up">
-            <div class="row g-3"> <div class="col-lg-2">
+            <div class="row g-3"> 
+                <div class="col-lg-2">
                     <label class="fw-bold small mb-2 text-uppercase text-dark">University</label>
                     <div class="custom-input-group">
                         <select name="university" id="university" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
@@ -268,7 +271,10 @@
                     <div class="custom-input-group">
                         <select name="batch" id="batch" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
                             <option value="">Select Batch</option>
-                            </select>
+                            {% for batch in batches %}
+                                <option value="{{batch.id}}">{{batch.year}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
 
@@ -278,7 +284,8 @@
             </div>
         </form>
     </div>
-</section>
+    </section>
+
     <section class="py-5 px-4 mt-5">
         <div class="container-fluid">
             <h2 class="display-6 fw-bold mb-4">Platform <span class="text-warning">Insights</span></h2>
@@ -339,30 +346,62 @@
     </section>
 
     <section class="upload-section px-4" id="upload">
-        <div class="container-fluid text-center">
-            <h2 class="display-4 mb-4" data-aos="fade-down">The Knowledge Vault</h2>
-            <p class="mb-5 fs-5">Secure your academic legacy. Upload your resources today.</p>
-            <div class="drop-box mx-auto col-lg-8" data-aos="zoom-in">
-                <i class="bi bi-cloud-arrow-up display-1 text-warning mb-4 d-block"></i>
-                <h3 class="fw-bold">Ready to Start?</h3>
-                <p class="opacity-75 mb-4">Drag files here or click to browse (PDF, DOCX, Images)</p>
-            <form method="POST" action="{% url 'upload_note' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="text" name="title" placeholder="Note Title" required>
-    
-    <select name="batch_id" required>
-        {% for batch in batches %}
-            <option value="{{batch.id}}">{{batch.year}}</option>
-        {% endfor %}
-    </select>
+    <div class="container-fluid text-center">
+        <h2 class="display-4 mb-4" data-aos="fade-down">The Knowledge Vault</h2>
+        <p class="mb-5 fs-5">Secure your academic legacy. Upload your resources today.</p>
 
-    <input type="file" name="note_file" id="fileInput" style="display: none;">
-    
-    <button type="button" class="btn btn-warning" onclick="document.getElementById('fileInput').click();">Select File</button>
-    <button type="submit" class="btn btn-primary">Save to Vault</button>
-</form>
-            </div>
+        <div class="drop-box mx-auto col-lg-10 p-5" id="dropBox">
+            <i class="bi bi-cloud-arrow-up display-1 text-warning mb-4 d-block"></i>
+            <h3 class="fw-bold">Ready to Start?</h3>
+            <p class="opacity-75 mb-5">Drag files here or click to browse (PDF, DOCX, Images)</p>
+
+            <form method="POST" action="{% url 'upload_note' %}" enctype="multipart/form-data" class="text-start">
+                {% csrf_token %}
+                
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <label class="small fw-bold text-uppercase opacity-75 mb-2">Note Title</label>
+                        <input type="text" name="title" class="form-control upload-input-style" placeholder="e.g. Modern Architecture Fundamentals" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small fw-bold text-uppercase opacity-75 mb-2">University Name</label>
+                        <input type="text" name="university_name" class="form-control upload-input-style" placeholder="Enter University" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small fw-bold text-uppercase opacity-75 mb-2">College Name</label>
+                        <input type="text" name="college_name" class="form-control upload-input-style" placeholder="Enter College" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small fw-bold text-uppercase opacity-75 mb-2">Course Name</label>
+                        <input type="text" name="course_name" class="form-control upload-input-style" placeholder="Enter Course (e.g. B.Tech CS)" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small fw-bold text-uppercase opacity-75 mb-2">Batch Year</label>
+                        <select name="batch_id" class="form-select upload-input-style" required>
+                            <option value="">Select Batch</option>
+                            {% for batch in batches %}
+                                <option value="{{batch.id}}">{{batch.year}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <input type="file" name="note_file" id="fileInput" hidden required>
+                    <p id="fileName" class="text-warning fw-bold mb-3"></p>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-outline-light rounded-pill px-4" id="selectBtn">Select File</button>
+                        <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold shadow">Save to Vault</button>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
     </section>
 </div>
 
@@ -388,37 +427,64 @@
         if(b2) b2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
     });
 
+    // --- AJAX FOR SEARCH SECTION (Keep this for Search) ---
     document.getElementById('university').addEventListener('change', function() {
-    fetch(`/ajax/load-colleges/?uni_id=${this.value}`)
-    .then(res => res.json())
-    .then(data => {
-        let options = '<option value="">Select College</option>';
-        data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
-        document.getElementById('college').innerHTML = options;
+        fetch(`/ajax/load-colleges/?uni_id=${this.value}`)
+        .then(res => res.json())
+        .then(data => {
+            let options = '<option value="">Select College</option>';
+            data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
+            document.getElementById('college').innerHTML = options;
+        });
     });
-    
-    
 
-    
+    document.getElementById('college').addEventListener('change', function() {
+        fetch(`/ajax/load-courses/?col_id=${this.value}`)
+        .then(res => res.json())
+        .then(data => {
+            let options = '<option value="">Select Course</option>';
+            data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
+            document.getElementById('course').innerHTML = options;
+        });
+    });
+
+    // UPLOAD SYSTEM (Simple File Logic)
     document.addEventListener('DOMContentLoaded', function() {
-        const uploadBtn = document.getElementById('uploadBtn');
+        const dropBox = document.getElementById('dropBox');
         const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const selectBtn = document.getElementById('selectBtn');
 
-        // जब 'Select File' बटन क्लिक हो
-        uploadBtn.addEventListener('click', function() {
+        if (!dropBox || !fileInput) return;
+
+        selectBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             fileInput.click();
         });
 
-        // (वैकल्पिक) फाइल चुनने के बाद बटन का टेक्स्ट बदलें ताकि पता चले फाइल चुनी गई है
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                uploadBtn.textContent = "File Selected: " + this.files[0].name;
-                uploadBtn.classList.replace('btn-warning', 'btn-success');
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileName.innerText = "Selected: " + fileInput.files[0].name;
             }
         });
+
+        dropBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropBox.style.borderColor = "#ffc107";
+        });
+
+        dropBox.addEventListener('dragleave', () => {
+            dropBox.style.borderColor = "";
+        });
+
+        dropBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileInput.files = e.dataTransfer.files;
+            if (fileInput.files.length > 0) {
+                fileName.innerText = "Selected: " + fileInput.files[0].name;
+            }
+            dropBox.style.borderColor = "";
+        });
     });
-
-
-});
 </script>
 {% endblock %}
