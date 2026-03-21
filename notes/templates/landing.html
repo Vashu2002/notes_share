@@ -1,279 +1,241 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Welcome - Note Share{% endblock %}
+{% block title %}NoteShare | Elite Experience{% endblock %}
 {% block content %}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
 <style>
-/* ===============================
-   ADVANCED HERO WRAPPER
-=================================*/
-.hero-section {
-    min-block-size: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    background: #ffffff; /* Light background for premium feel */
-}
+    :root {
+        --primary-gold: #d8cd2f;
+        --accent-orange: #ff791a;
+        --white-bg: #ffffff;
+    }
 
-/* Moving Mesh Background (Unique) */
-.mesh-bg {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(216, 205, 47, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(255, 121, 26, 0.15) 0px, transparent 50%);
-    z-index: 1;
-}
+    body {
+        margin: 0;
+        overflow-x: hidden;
+        background: var(--white-bg);
+    }
 
-/* Floating 3D Cards (Visual Interest) */
-.floating-glass-card {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-    z-index: 2;
-    animation: floatCard 6s infinite alternate ease-in-out;
-}
+    .hero-container {
+        position: relative;
+        block-size: 100vh;
+        inline-size: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        perspective: 1500px;
+    }
 
-.card-top-left { inset-block-start: 15%; inset-inline-start: 10%; animation-delay: 0s; }
-.card-bottom-right { inset-block-end: 15%; inset-inline-end: 10%; animation-delay: -3s; }
+    /* 1. ANIMATED BACKGROUND (Warp/Neural Hybrid) */
+    #bg-canvas {
+        position: absolute;
+        inset-block-start: 0; inset-inline-start: 0;
+        z-index: 1;
+        opacity: 0.4;
+    }
 
-@keyframes floatCard {
-    from { transform: translateY(0) rotate(0deg); }
-    to { transform: translateY(-30px) rotate(5deg); }
-}
+    /* 2. 3D PARALLAX CONTENT */
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        transform-style: preserve-3d;
+        text-align: center;
+    }
 
-/* ===============================
-   TYPOGRAPHY & GLOW
-=================================*/
-.hero-content {
-    position: relative;
-    z-index: 10;
-}
+    .hero-h1 {
+        font-size: clamp(3rem, 10vw, 6.5rem);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -4px;
+        color: #1a1a1a;
+        transform: translateZ(50px); /* 3D Depth */
+    }
 
+    .gradient-glow {
+        background: linear-gradient(90deg, var(--primary-gold), var(--accent-orange), var(--primary-gold));
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 3s linear infinite;
+    }
 
+    @keyframes shine {
+        to { background-position: 200% center; }
+    }
 
-.welcome-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 20px;
-    background: rgba(216, 205, 47, 0.1);
-    border: 1px solid rgba(216, 205, 47, 0.3);
-    border-radius: 100px;
-    color: #b8ad1a;
-    font-weight: 700;
-    font-size: 0.9rem;
-    margin-block-end: 30px;
-    transform: translateY(30px);
-    opacity: 0;
-    animation: fadeInUp 0.8s forwards;
-}
+    /* 3. MAGNETIC LIQUID BUTTON */
+    .btn-wrap {
+        margin-block-start: 40px;
+        transform: translateZ(80px);
+    }
 
+    .btn-elite {
+        position: relative;
+        padding: 22px 60px;
+        background: linear-gradient(135deg, var(--primary-gold), var(--accent-orange));
+        color: white !important;
+        font-weight: 800;
+        font-size: 1.2rem;
+        border-radius: 100px;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        box-shadow: 0 15px 45px rgba(255, 121, 26, 0.4);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: inline-block;
+        text-decoration: none;
+        overflow: hidden;
+    }
 
+    .btn-elite:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 25px 60px rgba(255, 121, 26, 0.6);
+    }
 
-.hero-title-main {
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 900;
-    line-height: 0.95;
-    letter-spacing: -3px;
-    color: #1a1a1a;
-    margin-block-end: 30px;
-}
+    /* Floating Glass Cards */
+    .mini-card {
+        position: absolute;
+        padding: 15px 25px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(216, 205, 47, 0.4);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        z-index: 5;
+        font-weight: 700;
+        color: var(--accent-orange);
+        pointer-events: none;
+    }
 
-.gradient-text-animated {
-    background: linear-gradient(90deg, #d8cd2f, #ff791a, #d8cd2f);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 3s linear infinite;
-}
+    .c-1 { inset-block-start: 20%; inset-inline-start: 15%; transform: translateZ(100px); }
+    .c-2 { inset-block-end: 20%; inset-inline-end: 15%; transform: translateZ(120px); }
 
-@keyframes shine {
-    to { background-position: 200% center; }
-}
-
-/* Interactive Button */
-.btn-ultimate {
-    position: relative;
-    padding: 20px 50px;
-    background: var(--primary-grad);
-    color: white !important;
-    border-radius: 100px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border: none;
-    box-shadow: 0 15px 35px rgba(255, 121, 26, 0.4);
-    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
-}
-
-.btn-ultimate:hover {
-    transform: scale(1.05) translateY(-5px);
-    box-shadow: 0 25px 50px rgba(255, 121, 26, 0.5);
-}
-
-.btn-ultimate::after {
-    content: '';
-    position: absolute;
-    inline-size: 100%;
-    block-size: 100%;
-    inset-block-start: 0;
-    inset-inline-start: -100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: 0.5s;
-}
-
-.btn-ultimate:hover::after {
-    inset-inline-start: 100%;
-}
-
-/* ===============================
-   ANIMATIONS
-=================================*/
-@keyframes fadeInUp {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Mouse Follower Light */
-.cursor-light {
-    position: fixed;
-    inline-size: 400px;
-    block-size: 400px;
-    background: radial-gradient(circle, rgba(255, 121, 26, 0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 0;
-    transform: translate(-50%, -50%);
-}
-
-
-/* ================= RESPONSIVE MASTER CODE ================= */
-
-/* 1. TABLET (iPad/Large Phones) - Jab screen 992px se choti ho */
-@media (max-width: 992px) {
-    .container { inline-size: 95%; } 
-    .brand-text { font-size: 1.4rem; }
-    .card-box { inline-size: 85%; padding: 25px; }
-}
-
-/* 2. MOBILE (Standard Phones) - Jab screen 768px se choti ho */
-@media (max-width: 768px) {
-    body { font-size: 14px; }
-    .brand-text { font-size: 1.2rem; }
-    .card-box { inline-size: 92%; padding: 20px; border-radius: 20px; }
-    .nav-link-modern { padding: 6px 10px !important; font-size: 0.8rem; }
-}
-
-/* 3. TV & LARGE SCREENS - Content ko bahut phailne se bachata hai */
-@media (min-width: 1400px) {
-    .container { max-inline-size: 1200px; margin: 0 auto; }
-}
-
-/* HAR SCREEN KE LIYE SAFETY - Cheezein screen se bahar na bhagein */
-img, video, canvas, svg {
-    max-inline-size: 100%;
-    block-size: auto;
-}
 </style>
 
-<div class="cursor-light" id="cursorLight"></div>
+<div class="hero-container" id="hero">
+    <canvas id="bg-canvas"></canvas>
 
-<section class="hero-section">
-    <div class="mesh-bg"></div>
-
-    <div class="floating-glass-card card-top-left d-none d-lg-block">
-        <i class="bi bi-lightning-charge-fill text-warning"></i>
-        <span class="ms-2 fw-bold">Fast Sync</span>
+    <div class="mini-card c-1 d-none d-lg-block">
+        <i class="bi bi-journal-text"></i> Smart Syncing
     </div>
-    <div class="floating-glass-card card-bottom-right d-none d-lg-block">
-        <i class="bi bi-shield-lock-fill" style="color: #ff791a;"></i>
-        <span class="ms-2 fw-bold">Secure Path</span>
+    <div class="mini-card c-2 d-none d-lg-block">
+        <i class="bi bi-shield-check"></i> Secure Cloud
     </div>
 
-    <div class="container text-center hero-content">
-        <div class="welcome-pill">
-            <i class="bi bi-stars me-2"></i> Elevate Your Knowledge
+    <div class="hero-content" id="parallax-target">
+        <div class="mb-3 opacity-75 fw-bold" style="letter-spacing: 3px; color: var(--accent-orange);">
+            — SINCE 2024 —
         </div>
 
-        <h1 class="hero-title-main">
-            Capture the <span class="gradient-text-animated">Path</span>,<br>
-            Reach the <span class="gradient-text-animated">Destination</span>.
+        <h1 class="hero-h1">
+            Capture the <span class="gradient-glow">Path</span>,<br>
+            Reach the <span class="gradient-glow">Destination</span>.
         </h1>
 
-        <p class="mx-auto text-muted mb-5" style="max-inline-size: 600px; font-size: 1.2rem; line-height: 1.6;">
-            The scriptures teach us that knowledge is our final home. 
-
-            Organize your thoughts and sync your world with NoteShare.
+        <p class="mt-4 mx-auto text-muted" style="max-inline-size: 600px; font-size: 1.3rem; line-height: 1.6;">
+            Knowledge is light. Organize your thoughts and sync your world with the most advanced note-sharing platform.
         </p>
 
-        <div class="d-flex flex-wrap justify-content-center gap-3">
-            <a href="{% url 'signup' %}" class="btn btn-ultimate">
-                Get Started Free <i class="bi bi-arrow-right ms-2"></i>
+        <div class="btn-wrap">
+            <a href="{% url 'signup' %}" class="btn-elite">
+                Get Started <i class="bi bi-arrow-right-short ms-2"></i>
             </a>
         </div>
-
-        <div class="mt-5 pt-5 d-flex justify-content-center gap-5 opacity-50">
-            <div class="text-center">
-                <h4 class="fw-bold mb-0">10k+</h4>
-                <small>Seekers</small>
-            </div>
-            <div class="text-center">
-                <h4 class="fw-bold mb-0">99.9%</h4>
-                <small>Reliable</small>
-            </div>
-        </div>
     </div>
-</section>
+</div>
 
 <script>
-// Mouse Move Effect for Light
+    // 1. NEURAL CONNECT BACKGROUND (Gold/Orange Theme)
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
 
-const light = document.getElementById('cursorLight');
-document.addEventListener('mousemove', (e) => {
-    light.style.left = e.clientX + 'px';
-    light.style.top = e.clientY + 'px';
-});
-
-// Particles Generation (Improved)
-
-function createParticles() {
-    const section = document.querySelector('.hero-section');
-    for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.style.position = 'absolute';
-        p.style.width = Math.random() * 10 + 'px';
-        p.style.height = p.style.width;
-        p.style.background = 'linear-gradient(90deg, #d8cd2f, #ff791a)';
-        p.style.borderRadius = '50%';
-        p.style.opacity = '0.2';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.top = Math.random() * 100 + '%';
-        p.style.zIndex = '1';
-        
-        section.appendChild(p);
-
-        // Simple floating animation
-        
-        p.animate([
-            { transform: 'translateY(0) scale(1)' },
-            { transform: `translateY(-${Math.random() * 100}px) scale(1.5)` }
-        ], {
-            duration: 3000 + Math.random() * 3000,
-            iterations: Infinity,
-            direction: 'alternate'
-        });
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
-}
-createParticles();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 3 + 1;
+            this.speedX = Math.random() * 1 - 0.5;
+            this.speedY = Math.random() * 1 - 0.5;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = '#d8cd2f55';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function createParticles() {
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+            particles.forEach(p2 => {
+                const dx = p.x - p2.x;
+                const dy = p.y - p2.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 120) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(255, 121, 26, ${0.1 - dist/120})`;
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            });
+        });
+        requestAnimationFrame(animate);
+    }
+
+    // 2. 3D TILT ON MOUSE MOVE
+    const target = document.getElementById('parallax-target');
+    document.addEventListener('mousemove', (e) => {
+        let x = (window.innerWidth / 2 - e.pageX) / 25;
+        let y = (window.innerHeight / 2 - e.pageY) / 25;
+
+        gsap.to(target, {
+            rotationY: x,
+            rotationX: -y,
+            duration: 0.8,
+            ease: "power2.out"
+        });
+
+        // Background tilt
+        gsap.to(".mini-card", {
+            x: x * 2,
+            y: y * 2,
+            duration: 1,
+            stagger: 0.1
+        });
+    });
+
+    init();
+    createParticles();
+    animate();
+    window.addEventListener('resize', init);
 </script>
 
 {% endblock %}
