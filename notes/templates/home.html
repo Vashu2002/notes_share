@@ -179,7 +179,6 @@
         background: rgba(255,255,255,0.05);
     }
 
-    /* UPLOAD FORM INPUTS STYLING */
     .upload-input-style {
         background: rgba(255,255,255,0.08) !important;
         border: 1px solid rgba(255,255,255,0.2) !important;
@@ -221,7 +220,7 @@
                         <p class="lead mb-5 fs-4">Access a premium ecosystem of peer-verified academic assets. Turn your knowledge into digital currency.</p>
                         <div class="d-flex flex-wrap gap-3">
                             <a href="#" class="btn btn-dark rounded-pill px-5 py-3 fw-bold shadow-lg">Explore Library <i class="bi bi-arrow-right-short ms-2"></i></a>
-                            <a href="#" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold">View Showcase</a>
+                            <a href="#upload" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold">Upload Knowledge</a>
                         </div>
                     </div>
                     <div class="col-lg-5 d-none d-lg-block text-center">
@@ -233,57 +232,48 @@
     </section>
 
     <section class="px-4">
-    <div class="container-fluid">
-        <form method="GET" action="{% url 'explore_notes' %}" class="smart-filter-card" data-aos="fade-up">
-            <div class="row g-3"> 
-                <div class="col-lg-2">
-                    <label class="fw-bold small mb-2 text-uppercase text-dark">University</label>
-                    <div class="custom-input-group">
-                        <select name="university" id="university" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                            <option value="">Select Uni</option>
-                            {% for uni in universities %}
-                            <option value="{{ uni.id }}">{{ uni.name }}</option>
-                            {% endfor %}
-                        </select>
+        <div class="container-fluid">
+            <form method="GET" action="{% url 'explore_notes' %}" class="smart-filter-card" data-aos="fade-up">
+                <div class="row g-3"> 
+                    <div class="col-lg-4">
+                        <label class="fw-bold small mb-2 text-uppercase text-dark">Institution (University/College)</label>
+                        <div class="custom-input-group">
+                            <select name="institution" id="institution_search" class="form-select-custom border-0 bg-transparent fw-bold text-dark institution-select" required>
+                                <option value="">Select Institution</option>
+                                {% for inst in institutions %}
+                                <option value="{{ inst.id }}">{{ inst.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold small mb-2 text-uppercase text-dark">Course</label>
+                        <div class="custom-input-group">
+                            <select name="course" id="course_search" class="form-select-custom border-0 bg-transparent fw-bold text-dark course-select" required>
+                                <option value="">Select Course</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label class="fw-bold small mb-2 text-uppercase text-dark">Batch</label>
+                        <div class="custom-input-group">
+                            <select name="batch" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
+                                <option value="">Select Batch</option>
+                                {% for batch in batches %}
+                                    <option value="{{batch.id}}">{{batch.year}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm">Search Database</button>
                     </div>
                 </div>
-
-                <div class="col-lg-2">
-                    <label class="fw-bold small mb-2 text-uppercase text-dark">College</label>
-                    <div class="custom-input-group">
-                        <select name="college" id="college" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                            <option value="">Select College</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <label class="fw-bold small mb-2 text-uppercase text-dark">Course</label>
-                    <div class="custom-input-group">
-                        <select name="course" id="course" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                            <option value="">Select Course</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <label class="fw-bold small mb-2 text-uppercase text-dark">Batch</label>
-                    <div class="custom-input-group">
-                        <select name="batch" id="batch" class="form-select-custom border-0 bg-transparent fw-bold text-dark">
-                            <option value="">Select Batch</option>
-                            {% for batch in batches %}
-                                <option value="{{batch.id}}">{{batch.year}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm">Search Database</button>
-                </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
     </section>
 
     <section class="py-5 px-4 mt-5">
@@ -346,62 +336,62 @@
     </section>
 
     <section class="upload-section px-4" id="upload">
-    <div class="container-fluid text-center">
-        <h2 class="display-4 mb-4" data-aos="fade-down">The Knowledge Vault</h2>
-        <p class="mb-5 fs-5">Secure your academic legacy. Upload your resources today.</p>
+        <div class="container-fluid text-center">
+            <h2 class="display-4 mb-4" data-aos="fade-down">The Knowledge Vault</h2>
+            <p class="mb-5 fs-5">Secure your academic legacy. Upload your resources today.</p>
 
-        <div class="drop-box mx-auto col-lg-10 p-5" id="dropBox">
-            <i class="bi bi-cloud-arrow-up display-1 text-warning mb-4 d-block"></i>
-            <h3 class="fw-bold">Ready to Start?</h3>
-            <p class="opacity-75 mb-5">Drag files here or click to browse (PDF, DOCX, Images)</p>
+            <div class="drop-box mx-auto col-lg-10 p-5" id="dropBox">
+                <i class="bi bi-cloud-arrow-up display-1 text-warning mb-4 d-block"></i>
+                <h3 class="fw-bold">Ready to Start?</h3>
+                <p class="opacity-75 mb-5">Drag files here or click to browse (PDF, DOCX, Images)</p>
 
-            <form method="POST" action="{% url 'upload_note' %}" enctype="multipart/form-data" class="text-start">
-                {% csrf_token %}
-                
-                <div class="row g-4 mb-4">
-                    <div class="col-md-12">
-                        <label class="small fw-bold text-uppercase opacity-75 mb-2">Note Title</label>
-                        <input type="text" name="title" class="form-control upload-input-style" placeholder="e.g. Modern Architecture Fundamentals" required>
+                <form method="POST" action="{% url 'upload_note' %}" enctype="multipart/form-data" class="text-start">
+                    {% csrf_token %}
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-12">
+                            <label class="small fw-bold text-uppercase opacity-75 mb-2">Note Title</label>
+                            <input type="text" name="title" class="form-control upload-input-style" placeholder="e.g. Modern Architecture Fundamentals" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small fw-bold text-uppercase opacity-75 mb-2">Note Type</label>
+                            <select name="note_type" class="form-select upload-input-style" required>
+                                <option value="">Select Category</option>
+                                <option value="handwritten">Handwritten Notes</option>
+                                <option value="digital">Digital PDF/Slides</option>
+                                <option value="pyq">Previous Year Questions</option>
+                                <option value="assignment">Solved Assignments</option>
+                                <option value="lab">Lab Reports</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small fw-bold text-uppercase opacity-75 mb-2">Batch Year</label>
+                            <input type="text" name="batch_year" class="form-control upload-input-style" placeholder="e.g. 2024" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small fw-bold text-uppercase opacity-75 mb-2">Institution Name</label>
+                            <input type="text" name="institution_name" class="form-control upload-input-style" placeholder="Enter University/College" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="small fw-bold text-uppercase opacity-75 mb-2">Course Name</label>
+                            <input type="text" name="course_name" class="form-control upload-input-style" placeholder="e.g. B.Tech CS" required>
+                        </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="small fw-bold text-uppercase opacity-75 mb-2">University Name</label>
-                        <input type="text" name="university_name" class="form-control upload-input-style" placeholder="Enter University" required>
+                    <div class="text-center">
+                        <input type="file" name="note_file" id="fileInput" hidden required>
+                        <p id="fileName" class="text-warning fw-bold mb-3"></p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="button" class="btn btn-outline-light rounded-pill px-4" id="selectBtn">Select File</button>
+                            <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold shadow">Save to Vault</button>
+                        </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <label class="small fw-bold text-uppercase opacity-75 mb-2">College Name</label>
-                        <input type="text" name="college_name" class="form-control upload-input-style" placeholder="Enter College" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="small fw-bold text-uppercase opacity-75 mb-2">Course Name</label>
-                        <input type="text" name="course_name" class="form-control upload-input-style" placeholder="Enter Course (e.g. B.Tech CS)" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="small fw-bold text-uppercase opacity-75 mb-2">Batch Year</label>
-                        <select name="batch_id" class="form-select upload-input-style" required>
-                            <option value="">Select Batch</option>
-                            {% for batch in batches %}
-                                <option value="{{batch.id}}">{{batch.year}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="text-center">
-                    <input type="file" name="note_file" id="fileInput" hidden required>
-                    <p id="fileName" class="text-warning fw-bold mb-3"></p>
-                    
-                    <div class="d-flex justify-content-center gap-3">
-                        <button type="button" class="btn btn-outline-light rounded-pill px-4" id="selectBtn">Select File</button>
-                        <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold shadow">Save to Vault</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
     </section>
 </div>
 
@@ -427,26 +417,29 @@
         if(b2) b2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
     });
 
-    // --- AJAX FOR SEARCH SECTION (Keep this for Search) ---
-    document.getElementById('university').addEventListener('change', function() {
-        fetch(`/ajax/load-colleges/?uni_id=${this.value}`)
-        .then(res => res.json())
-        .then(data => {
-            let options = '<option value="">Select College</option>';
-            data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
-            document.getElementById('college').innerHTML = options;
-        });
-    });
+    // --- DYNAMIC DROPDOWN LOGIC (FOR SEARCH ONLY) ---
+    function setupDynamicDropdowns(instSelector, courseSelector) {
+        const instEl = document.getElementById(instSelector);
+        const courseEl = document.getElementById(courseSelector);
+        if(!instEl || !courseEl) return;
 
-    document.getElementById('college').addEventListener('change', function() {
-        fetch(`/ajax/load-courses/?col_id=${this.value}`)
-        .then(res => res.json())
-        .then(data => {
-            let options = '<option value="">Select Course</option>';
-            data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
-            document.getElementById('course').innerHTML = options;
+        instEl.addEventListener('change', function() {
+            if (!this.value) {
+                courseEl.innerHTML = '<option value="">Select Course</option>';
+                return;
+            }
+            fetch(`/ajax/load-courses/?inst_id=${this.value}`)
+            .then(res => res.json())
+            .then(data => {
+                let options = '<option value="">Select Course</option>';
+                data.forEach(c => options += `<option value="${c.id}">${c.name}</option>`);
+                courseEl.innerHTML = options;
+            });
         });
-    });
+    }
+
+    // Initialize for Search only (Upload now uses text inputs)
+    setupDynamicDropdowns('institution_search', 'course_search');
 
     // UPLOAD SYSTEM (Simple File Logic)
     document.addEventListener('DOMContentLoaded', function() {

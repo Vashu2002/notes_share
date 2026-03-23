@@ -1,30 +1,28 @@
 from django.urls import path
-from .views import (
-    LandingView, NoteListView, AboutView, ContactView, 
-    ExploreNotesView, DiscoverView, WalletView, PrivacyView,
-    load_colleges, load_courses, upload_note
-)
+from . import views # views ko directly import karna zyada safe hai errors se bachne ke liye
 
 urlpatterns = [
     # 🔹 Main Pages
-    path('', LandingView.as_view(), name='landing'),
-    path('home/', NoteListView.as_view(), name='home'),
+    path('', views.LandingView.as_view(), name='landing'),
+    path('home/', views.NoteListView.as_view(), name='home'),
 
-    # 🔹 Upload
-    path('upload/', upload_note, name='upload_note'),
+    # 🔹 Upload (The Knowledge Vault)
+    # Iska name 'upload_note' hi rakha hai jo HTML ke form action mein hai
+    path('upload/', views.upload_note, name='upload_note'),
 
-    # 🔹 AJAX
-    path('ajax/load-colleges/', load_colleges, name='load_colleges'),
-    path('ajax/load-courses/', load_courses, name='load_courses'),
+    # 🔹 AJAX (Search Filters ke liye)
+    # HTML ke JS fetch(`/ajax/load-courses/?inst_id=${this.value}`) se match kiya gaya hai
+    path('ajax/load-courses/', views.load_courses, name='load_courses'),
 
-    # 🔹 Explore
-    path('notes/library/', ExploreNotesView.as_view(), name='explore_notes'),
-    path('discover/', DiscoverView.as_view(), name='explore_now'),
-    path('home/discover/', DiscoverView.as_view(), name='home_explore'),
+    # 🔹 Explore & Search Database
+    # Jab user search button dabayega, wo is library path par jayega
+    path('notes/library/', views.ExploreNotesView.as_view(), name='explore_notes'),
+    path('discover/', views.DiscoverView.as_view(), name='explore_now'),
+    path('home/discover/', views.DiscoverView.as_view(), name='home_explore'),
 
     # 🔹 Other Pages
-    path('wallet/', WalletView.as_view(), name='wallet'),
-    path('about/', AboutView.as_view(), name='about'),
-    path('contact/', ContactView.as_view(), name='contact'),
-    path('privacy/', PrivacyView.as_view(), name='privacy'),
+    path('wallet/', views.WalletView.as_view(), name='wallet'),
+    path('about/', views.AboutView.as_view(), name='about'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
+    path('privacy/', views.PrivacyView.as_view(), name='privacy'),
 ]
